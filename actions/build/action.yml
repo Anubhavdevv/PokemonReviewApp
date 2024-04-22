@@ -31,14 +31,17 @@ runs:
         dotnet-version: '8.0.x'
 
     - name: Restore Dependencies
+      shell: bash
       run: dotnet restore ${{ inputs.solution-file }}
 
     - name: Build Project
       id: build
+      shell: bash
       run: dotnet build ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-restore --output ${{ inputs.artifact-path }}
 
     - name: Publish Project
       id: Publish
+      shell: bash
       run: dotnet publish ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-build --output ${{ inputs.artifact-path }}
 
     - name: Publish Artifact
