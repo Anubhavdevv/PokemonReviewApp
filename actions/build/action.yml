@@ -1,0 +1,48 @@
+name: 'Build'
+description: 'Build a .Net Project and creates an artifcat for it'
+
+inputs:
+  solution-file:
+    description: 'The Solution File To Build'
+    required: true
+    default: '**/*.sln'
+
+  configuration:
+    description: 'Build Configuration'
+    required: false
+    default: 'Release'
+
+  artifact-name:
+    description: 'Artifact name'
+    required: true
+    default: 'publish'
+
+  artifact-path:
+    description: 'Artifact path'
+    required: true
+    default: './dist'
+
+runs: 
+  using: 'composite'
+  steps:
+    - name: Setting up .Net (Building and Creating Artifacts)
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore Dependencies
+      run: dotnet restore ${{ inputs.solution-file }}
+
+    - name: Build Project
+      id: build
+      run: dotnet build ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-restore --output ${{ inputs.artifact-path }}
+
+    - name: Publish Project
+      id: Publish
+      run: dotnet publish ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-build --output ${{ inputs.artifact-path }}
+
+    - name: Publish Artifact
+      uses: actions/upload-artifact@v3
+      with: 
+        path: ${{ inputs.artifact-path }}
+        name: ${{ inputs.artifact-name }}
