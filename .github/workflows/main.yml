@@ -7,21 +7,14 @@ on:
       - main
 
 jobs:
-  publish:
+  build:
+    name: Build Flow
     runs-on: ubuntu-latest
 
     steps: 
-      - uses: actions/checkout@v3
-      - name: Setup .Net
-        uses: actions/setup-dotnet@v3
+      - name: Run Composite Action 
+      - uses: .github/build@v1
         with:
-          dotnet-version: '8.0.x'
-
-      - name: Restore
-        run: dotnet restore ./PokemonReview.sln
-
-      - name: Build
-        run: dotnet build ./PokemonReview.sln --configuration Release --no-restore
-
-      - name: Publish
-        run: dotnet publish ./PokemonReview.sln --configuration Release --no-build 
+          solution-file: 'PokemonReview.sln'
+          configuration: 'Release'
+          name: ${{ github.event.input.name }}
