@@ -24,6 +24,7 @@ jobs:
           name: ${{ github.event.input.name }}
 
   deploy-job:
+    needs: [build]
     uses: Anubhavdevv/PokemonReviewApp/.github/workflows/deploy.yml@main
     with:
       name: ${{ inputs.name }}
