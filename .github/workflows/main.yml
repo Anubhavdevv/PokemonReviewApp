@@ -2,7 +2,11 @@ name: Publish 🚀
 
 on:
   workflow_dispatch: 
-  push:
+    inputs:
+      name: 
+        description: name to greet
+        type: string
+        required: true
 
 jobs:
   build:
@@ -18,4 +22,9 @@ jobs:
           solution-file: 'PokemonReview.sln'
           configuration: 'Release'
           name: ${{ github.event.input.name }}
+
+  deploy-job:
+    uses: Anubhavdevv/PokemonReviewApp/.github/workflows/deploy@main
+    with:
+      name: ${{ inputs.name }}
         
