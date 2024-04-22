@@ -12,10 +12,15 @@ inputs:
     required: false
     default: 'Release'
 
-outputs: 
+  artifact-name:
+    description: 'Artifact name'
+    required: true
+    default: 'publish'
+
   artifact-path:
-    description: 'The Path to the artifacts'
-    value: '${{ steps.build.outputs.artifact-path }}'
+    description: 'Artifact path'
+    required: true
+    default: './dist'
 
 runs: 
   using: 'composite'
@@ -32,16 +37,16 @@ runs:
 
     - name: Build Project
       id: build
-      run: dotnet build ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-restore --output $(Build.ArtifactStagingDirectory)
+      run: dotnet build ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-restore --output ${{ inputs.artifact-path }}
 
     - name: Publish Project
       id: Publish
-      run: dotnet publish ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-build --output $(Build.ArtifactStagingDirectory)
+      run: dotnet publish ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-build --output ${{ inputs.artifact-path }}
 
     - name: Publish Artifact
       uses: actions/upload-artifact@v3
       with: 
-        path: $(Build.ArtifactStagingDirectory)
-        name: ${{ github.event.inputs.name }}-artifact
+        path: ${{ inputs.artifact-path }}
+        name: ${{ inputs.artifact-name }}
 
 
