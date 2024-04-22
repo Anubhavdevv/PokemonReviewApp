@@ -12,8 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps: 
+      - uses: actions/checkout@v4
+      
       - name: Run Composite Action 
-      - uses: .github/build@v1
+        uses: .github/build@main
         with:
           solution-file: 'PokemonReview.sln'
           configuration: 'Release'
