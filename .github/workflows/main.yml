@@ -3,8 +3,6 @@ name: Publish 🚀
 on:
   workflow_dispatch: 
   push:
-    branches:
-      - main
 
 jobs:
   build:
@@ -15,8 +13,9 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run Composite Action 
-        uses: ./.github/build
+        uses: ./actions/build
         with:
           solution-file: 'PokemonReview.sln'
           configuration: 'Release'
           name: ${{ github.event.input.name }}
+        
