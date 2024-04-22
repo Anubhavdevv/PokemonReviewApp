@@ -32,20 +32,13 @@ runs:
 
     - name: Restore Dependencies
       shell: bash
-      run: dotnet restore ${{ inputs.solution-file }}
-
-    - name: Build Project
-      id: build
-      shell: bash
-      run: dotnet build ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-restore --output ${{ inputs.artifact-path }}
-
-    - name: Publish Project
-      id: Publish
-      shell: bash
-      run: dotnet publish ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-build --output ${{ inputs.artifact-path }}
+      run: |
+        dotnet restore ${{ inputs.solution-file }}
+        dotnet build ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-restore
+        dotnet publish ${{ inputs.solution-file }} --configuration ${{ inputs.configuration }} --no-build --output ${{ inputs.artifact-path }}
 
     - name: Publish Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with: 
         path: ${{ inputs.artifact-path }}
         name: ${{ inputs.artifact-name }}
