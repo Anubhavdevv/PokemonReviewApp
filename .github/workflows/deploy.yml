@@ -1,0 +1,35 @@
+name: Deploy
+
+on: 
+  workflow_call:
+    inputs:
+      name:
+        description: name of the person to greet
+        required: true
+        type: string
+      artifact-name:
+        description: name of the artifact to download
+        required: true
+        type: string
+      artifact-path:
+        description: path of the artifact where to download
+        default: $PWD
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet person
+        run: echo "Hello, ${{ inputs.name }}!"
+      
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-path }}
+
+      - name: print artifacts list
+        run: ls ${{ inputs.artifact-path }}
+      
+      
+  
