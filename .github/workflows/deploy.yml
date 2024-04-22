@@ -9,11 +9,11 @@ on:
         type: string
       artifact-name:
         description: name of the artifact to download
-        required: true
+        default: publish
         type: string
       artifact-path:
         description: path of the artifact where to download
-        default: $PWD
+        default: ./dist
         type: string
 
 jobs:
